@@ -11,7 +11,6 @@ using Ryujinx.Common.Helper;
 using Ryujinx.Common.Logging;
 using Ryujinx.Common.Utilities;
 using Ryujinx.HLE;
-using Ryujinx.HLE.HOS.SystemState;
 using System.Collections.Generic;
 using System.Linq;
 using RyuLogger = Ryujinx.Common.Logging.Logger;
@@ -684,18 +683,15 @@ namespace Ryujinx.Ava.Systems.Configuration
             
             public ReactiveObject<bool> Xc2MenuSoftlockFix { get; private set; }
             
-            public ReactiveObject<bool> EnableShaderTranslationDelay { get; private set; }
-            
-            public ReactiveObject<int> ShaderTranslationDelay { get; private set; }
+            public ReactiveObject<bool> DisableNifmIsAnyInternetRequestAccepted { get; private set; }
 
             public HacksSection()
             {
                 ShowDirtyHacks = new ReactiveObject<bool>();
                 Xc2MenuSoftlockFix = new ReactiveObject<bool>();
                 Xc2MenuSoftlockFix.Event += HackChanged;
-                EnableShaderTranslationDelay = new ReactiveObject<bool>();
-                EnableShaderTranslationDelay.Event += HackChanged;
-                ShaderTranslationDelay = new ReactiveObject<int>();
+                DisableNifmIsAnyInternetRequestAccepted = new ReactiveObject<bool>();
+                DisableNifmIsAnyInternetRequestAccepted.Event += HackChanged;
             }
 
             private void HackChanged(object sender, ReactiveEventArgs<bool> rxe)
@@ -726,8 +722,8 @@ namespace Ryujinx.Ava.Systems.Configuration
                     if (Xc2MenuSoftlockFix)
                         Apply(DirtyHack.Xc2MenuSoftlockFix);
                     
-                    if (EnableShaderTranslationDelay)
-                        Apply(DirtyHack.ShaderTranslationDelay, ShaderTranslationDelay);
+                    if (DisableNifmIsAnyInternetRequestAccepted)
+                        Apply(DirtyHack.NifmServiceDisableIsAnyInternetRequestAccepted);
                     
                     return enabledHacks.ToArray();
 
@@ -783,11 +779,6 @@ namespace Ryujinx.Ava.Systems.Configuration
         /// Enables or disables Discord Rich Presence
         /// </summary>
         public ReactiveObject<bool> EnableDiscordIntegration { get; private set; }
-
-        /// <summary>
-        /// Checks for updates when Ryujinx starts when enabled
-        /// </summary>
-        public ReactiveObject<bool> CheckUpdatesOnStart { get; private set; }
         
         /// <summary>
         /// Checks for updates when Ryujinx starts when enabled, either prompting when an update is found or just showing a notification.
@@ -810,9 +801,9 @@ namespace Ryujinx.Ava.Systems.Configuration
         public ReactiveObject<bool> RememberWindowState { get; private set; }
 
         /// <summary>
-        /// Enables or disables the redesigned title bar
+        /// Disable the new title bar layout & window layout changes.
         /// </summary>
-        public ReactiveObject<bool> ShowTitleBar { get; private set; }
+        public ReactiveObject<bool> ShowOldUI { get; private set; }
 
         /// <summary>
         /// Enables hardware-accelerated rendering for Avalonia
@@ -833,15 +824,14 @@ namespace Ryujinx.Ava.Systems.Configuration
             Hid = new HidSection();
             Multiplayer = new MultiplayerSection();
             Hacks = new HacksSection();
-            EnableDiscordIntegration = new ReactiveObject<bool>();
-            CheckUpdatesOnStart = new ReactiveObject<bool>();
             UpdateCheckerType = new ReactiveObject<UpdaterType>();
             FocusLostActionType = new ReactiveObject<FocusLostType>();
+            HideCursor = new ReactiveObject<HideCursorMode>();
+            EnableDiscordIntegration = new ReactiveObject<bool>();
             ShowConfirmExit = new ReactiveObject<bool>();
             RememberWindowState = new ReactiveObject<bool>();
-            ShowTitleBar = new ReactiveObject<bool>();
+            ShowOldUI = new ReactiveObject<bool>();
             EnableHardwareAcceleration = new ReactiveObject<bool>();
-            HideCursor = new ReactiveObject<HideCursorMode>();
         }
 
         public HleConfiguration CreateHleConfiguration() =>

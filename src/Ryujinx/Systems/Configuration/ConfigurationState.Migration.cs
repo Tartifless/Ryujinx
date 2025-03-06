@@ -46,12 +46,11 @@ namespace Ryujinx.Ava.Systems.Configuration
             
           
             EnableDiscordIntegration.Value = cff.EnableDiscordIntegration;
-            CheckUpdatesOnStart.Value = shouldLoadFromFile ? cff.CheckUpdatesOnStart : CheckUpdatesOnStart.Value; // Get from global config only
             UpdateCheckerType.Value = shouldLoadFromFile ? cff.UpdateCheckerType : UpdateCheckerType.Value; // Get from global config only
             FocusLostActionType.Value = cff.FocusLostActionType;
             ShowConfirmExit.Value = shouldLoadFromFile ? cff.ShowConfirmExit : ShowConfirmExit.Value; // Get from global config only
             RememberWindowState.Value = shouldLoadFromFile ? cff.RememberWindowState : RememberWindowState.Value; // Get from global config only
-            ShowTitleBar.Value = shouldLoadFromFile ? cff.ShowTitleBar : ShowTitleBar.Value; // Get from global config only
+            ShowOldUI.Value = shouldLoadFromFile ? cff.ShowTitleBar : ShowOldUI.Value; // Get from global config only
             EnableHardwareAcceleration.Value = shouldLoadFromFile ? cff.EnableHardwareAcceleration : EnableHardwareAcceleration.Value; // Get from global config only
             HideCursor.Value = cff.HideCursor;
           
@@ -161,9 +160,7 @@ namespace Ryujinx.Ava.Systems.Configuration
                 DirtyHacks hacks = new (cff.DirtyHacks ?? []);
 
                 Hacks.Xc2MenuSoftlockFix.Value = hacks.IsEnabled(DirtyHack.Xc2MenuSoftlockFix);
-
-                Hacks.EnableShaderTranslationDelay.Value = hacks.IsEnabled(DirtyHack.ShaderTranslationDelay);
-                Hacks.ShaderTranslationDelay.Value = hacks[DirtyHack.ShaderTranslationDelay].CoerceAtLeast(0);
+                
             }
 
             if (configurationFileUpdated)
@@ -442,6 +439,8 @@ namespace Ryujinx.Ava.Systems.Configuration
                 (65, static cff => cff.UpdateCheckerType = cff.CheckUpdatesOnStart ? UpdaterType.PromptAtStartup : UpdaterType.Off),
                 (66, static cff => cff.DisableInputWhenOutOfFocus = false),
                 (67, static cff => cff.FocusLostActionType = cff.DisableInputWhenOutOfFocus ? FocusLostType.BlockInput : FocusLostType.DoNothing)
+                // 68 was the version that added per-game configs; the file structure did not change
+                // the version was increased so external tools could know that your Ryujinx version has per-game config capabilities.
             );
     }
 }

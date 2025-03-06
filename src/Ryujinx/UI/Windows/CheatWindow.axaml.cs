@@ -1,5 +1,4 @@
 using Avalonia.Collections;
-using LibHac.Tools.FsSystem;
 using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.UI.Models;
 using Ryujinx.Ava.Systems.AppLibrary;
@@ -32,7 +31,7 @@ namespace Ryujinx.Ava.UI.Windows
             Title = RyujinxApp.FormatTitle(LocaleKeys.CheatWindowTitle);
         }
 
-        public CheatWindow(VirtualFileSystem virtualFileSystem, string titleId, string titleName, string titlePath)
+        public CheatWindow(VirtualFileSystem virtualFileSystem, string titleId, string titleName, string titlePath) : base(useCustomTitleBar: true, 46)
         {
             MinWidth = 500;
             MinHeight = 650;
@@ -43,6 +42,9 @@ namespace Ryujinx.Ava.UI.Windows
             BuildId = ApplicationData.GetBuildId(virtualFileSystem, ConfigurationState.Instance.System.IntegrityCheckLevel, titlePath);
 
             InitializeComponent();
+
+            FlushHeader.IsVisible = !ConfigurationState.Instance.ShowOldUI;
+            NormalHeader.IsVisible = ConfigurationState.Instance.ShowOldUI;
 
             string modsBasePath = ModLoader.GetModsBasePath();
             string titleModsPath = ModLoader.GetApplicationDir(modsBasePath, titleId);

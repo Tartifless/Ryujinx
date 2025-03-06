@@ -7,13 +7,12 @@ using Avalonia.Platform;
 using Avalonia.Threading;
 using DynamicData;
 using FluentAvalonia.UI.Controls;
-using FluentAvalonia.UI.Windowing;
 using Gommon;
 using LibHac.Ns;
-using LibHac.Tools.FsSystem;
 using Ryujinx.Ava.Common;
 using Ryujinx.Ava.Common.Locale;
 using Ryujinx.Ava.Input;
+using Ryujinx.Ava.Systems;
 using Ryujinx.Ava.UI.Applet;
 using Ryujinx.Ava.UI.Helpers;
 using Ryujinx.Ava.UI.ViewModels;
@@ -97,7 +96,7 @@ namespace Ryujinx.Ava.UI.Windows
             TitleBar.Height = MenuBarHeight;
             
             // Correctly size window when 'TitleBar' is enabled (Nov. 14, 2024)
-            TitleBarHeight = (ConfigurationState.Instance.ShowTitleBar ? TitleBar.Height : 0);
+            TitleBarHeight = (ConfigurationState.Instance.ShowOldUI ? TitleBar.Height : 0);
 
             ApplicationList.DataContext = DataContext;
             ApplicationGrid.DataContext = DataContext;
